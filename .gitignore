@@ -1,0 +1,55 @@
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.backup
+.env.production
+
+# PHP
+.phpactor.json
+.phpunit.result.cache
+
+# IDEs
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+
+# PHPUnit
+/.phpunit.cache
+
+# Auth
+/auth.json
+
+# Dependencies
+/vendor
+/node_modules
+
+# Build files
+/public/build
+/public/hot
+/public/storage
+
+# Laravel storage
+/storage/*.key
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/pail
+
+# Cache
+/bootstrap/cache/*
+
+# Docker/MySQL data
+/data
+
+# Laravel Homestead
+Homestead.json
+Homestead.yaml

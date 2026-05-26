@@ -1,0 +1,52 @@
+Start containers
+ docker compose up -d --build
+Install Laravel
+ // docker compose exec app composer create-project laravel/laravel:^12 .
+
+ docker compose exec app composer create-project laravel/laravel:^12 temp
+ Then
+ // Unix
+ mv temp/* temp/.* . 2>/dev/null 
+ rm -rf temp
+ // Powershell
+ Move-Item temp\* . -Force  or 
+ Move-Item temp\.* . -Force -ErrorAction SilentlyContinue
+ Remove-Item temp -Recurse -Force
+
+
+Laravel → http://localhost
+phpMyAdmin → http://localhost:8080
+
+// How to run laravel artisan Commands
+docker compose exec app bash
+ then run laravel artisan command at bash
+
+Commands
+=========
+1. docker compose up -d
+  Starts containers in detached mode
+  Uses existing images (no rebuild)
+  Fast startup
+  Changes in Dockerfile are ignored
+
+2. docker compose up -d --build
+  Forces Docker to rebuild images before starting
+  Then runs containers in detached mode
+  Slower, but ensures latest changes are included
+  👉 Use this when:
+    You changed Dockerfile
+    You updated dependencies
+    You modified build-related config
+
+Pro tip (saves time)
+====================
+If you're actively developing:
+  docker compose up -d --build --remove-orphans
+  --remove-orphans cleans up unused containers from old configs
+
+
+docker compose exec app php artisan key:generate
+docker compose exec app php artisan migrate --force
+docker compose exec app php artisan config:cache
+docker compose exec app php artisan route:cache
+docker compose exec app php artisan view:cache
