@@ -1,0 +1,48 @@
+# ─── Git ───────────────────────────────────────
+.git
+.gitignore
+.gitattributes
+
+# ─── Docker ────────────────────────────────────
+docker-compose.yml
+.dockerignore
+
+# ─── Laravel Caches & Logs ─────────────────────
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*
+
+# ─── Node Modules ──────────────────────────────
+node_modules
+npm-debug.log
+yarn-error.log
+
+# ─── Vendor (Composer installs inside Docker) ──
+# vendor/   ← DO NOT ignore this, needed at runtime
+
+# ─── Environment Files ─────────────────────────
+.env.example
+.env.testing
+.env.backup
+
+# ─── IDE & OS Files ────────────────────────────
+.idea
+.vscode
+*.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ─── Tests ─────────────────────────────────────
+tests/
+phpunit.xml
+
+# ─── README & Docs ─────────────────────────────
+README.md
+*.txt
+*.md
+
+# ─── MySQL Data (if local data folder exists) ──
+data/

@@ -1,15 +1,22 @@
-version: "3.8"
-
 services:
+
+  # ─── PHP-FPM Application ───────────────────────────────────────────
   app:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
     container_name: laravel_app
     restart: unless-stopped
+    working_dir: /var/www
     volumes:
       - .:/var/www
+    networks:
+      - laravel
+    depends_on:
+      db:
+        condition: service_healthy
 
+  # ─── Nginx Web Server ──────────────────────────────────────────────
   nginx:
     image: nginx:alpine
     container_name: laravel_nginx
@@ -19,35 +26,55 @@ services:
     volumes:
       - .:/var/www
       - ./docker/nginx:/etc/nginx/conf.d
+    networks:
+      - laravel
     depends_on:
       - app
 
+  # ─── MySQL Database ────────────────────────────────────────────────
   db:
     image: mysql:8.0
     container_name: laravel_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: laravel_practice
+      MYSQL_ROOT_PASSWORD: "Gautam@123#"
+      MYSQL_ROOT_HOST: "%"
     ports:
-      - "3306:3306"  
+      - "3306:3306"
     volumes:
-      - ./data:/var/lib/mysql
-      # - dbdata:/var/lib/mysql
+      - dbdata:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - laravel
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pGautam@123#"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # ─── phpMyAdmin ────────────────────────────────────────────────────
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: laravel_phpmyadmin
     restart: unless-stopped
     ports:
-      - "8080:80"   # remove this in real production if needed
+      - "8080:80"
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: "Gautam@123#"
+    networks:
+      - laravel
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+
+networks:
+  laravel:
+    driver: bridge
 
 volumes:
   dbdata:
+    driver: local
